@@ -1,0 +1,97 @@
+
+<div>
+  <div>
+    <button type="button" onclick='addToArr("INTJ")'>INTJ</button>
+    <button type="button" onclick='addToArr("INTP")'>INTP</button>
+    <button type="button" onclick='addToArr("ENTJ")'>ENTJ</button>
+    <button type="button" onclick='addToArr("ENTP")'>ENTP</button>
+  </div>
+  <div>
+    <button type="button" onclick='addToArr("INFJ")'>INFJ</button>
+    <button type="button" onclick='addToArr("INFP")'>INFP</button>
+    <button type="button" onclick='addToArr("ENFJ")'>ENFJ</button>
+    <button type="button" onclick='addToArr("ENFP")'>ENFP</button>
+  </div>
+  <div>
+    <button type="button" onclick='addToArr("ISTJ")'>ISTJ</button>
+    <button type="button" onclick='addToArr("ISFJ")'>ISFJ</button>
+    <button type="button" onclick='addToArr("ESTJ")'>ESTJ</button>
+    <button type="button" onclick='addToArr("ESFJ")'>ESFJ</button>
+  </div>
+  <div>
+    <button type="button" onclick='addToArr("ISTP")'>ISTP</button>
+    <button type="button" onclick='addToArr("ISFP")'>ISFP</button>
+    <button type="button" onclick='addToArr("ESTP")'>ESTP</button>
+    <button type="button" onclick='addToArr("ESFP")'>ESFP</button>
+  </div>
+  <div>
+    <input type='text' id='username' value='insert username here'>
+    <button type='button' onclick='submitPersonalityPref()'>SUBMIT</button>
+  </div>
+</div>
+<div>
+  <input type='text' id='usernameForPP' value='get PP for this user'>
+  <button type='button' onclick='getPersonalityPref()'>GET</button>
+  <p id='personalityPrefSelected'>Selected PersonalityPref:</p>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+
+var arr = [];
+
+function addToArr(str){
+  var index = arr.indexOf(str);
+  if (index > -1){
+    arr.splice(index, 1);
+    //console.log(arr);
+    return;
+  }
+  arr.push(str);
+  //console.log(arr);
+}
+
+function submitPersonalityPref(){
+  var username = document.getElementById('username').value;
+  /* easy way to send single variables
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET", "get-personality-preference.php?q=" + username, true);
+  xmlhttp.send();
+  console.log(xmlhttp);
+  */
+  arr.push(username);
+  var jsonString = JSON.stringify(arr);
+  console.log(jsonString);
+  $.ajax({
+        type: "POST",
+        url: "get-personality-preference.php",
+        data: {data : jsonString},
+        cache: false,
+        success: function(){
+            //alert("OK");
+        }
+    });
+  addToArr(username); // removes username after submitting
+}
+
+function getPersonalityPref(){
+  var username = document.getElementById('usernameForPP').value;
+  var textTemp = document.getElementById('personalityPrefSelected');
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onload = function() {
+        //This is where you handle what to do with the response.
+        //The actual data is found on this.responseText
+        var ret = this.response;
+        var ppArr = JSON.parse(ret);
+        //console.log(ppArr);
+        var str = "";
+        for(var i = 0; i < ppArr.length ; i++){
+          str += " " + ppArr[i];
+        }
+        console.log(str);
+        textTemp.innerHTML =  'Selected PersonalityPref for ' + username + ' : ' + str;
+    };
+  xmlhttp.open("GET", "get-personality-preference.php?q=" + username, true);
+  xmlhttp.send();
+}
+
+</script>
