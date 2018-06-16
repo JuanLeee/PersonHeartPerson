@@ -1,0 +1,107 @@
+<div>
+  <input type='text' id='usernameForProfile' value='get user profile'>
+  <button type='button' onclick='getUser()'>GET USER</button>
+  <button type='button' onclick='updateUser()'>UPDATE USER</button>
+</div>
+<div>
+  <p>USERNAME </p>
+  <input type='text' id='username-profile' value='username'>
+  <p>EMAIL </p>
+  <input type='text' id='email-profile' value='email'>
+  <p>PHONE NUMBER </p>
+  <input type='text' id='phone-number-profile' value='778000000'>
+  <p>NAME </p>
+  <input type='text' id='name-profile' value='name'>
+  <p>AGE </p>
+  <input type='text' id='age-profile' value='age'>
+  <p>GENDER </p>
+  <input type='text' id='gender-profile' value='m/f/a'>
+  <p>GENDER PREFERENCE </p>
+  <input type='text' id='gender-preference-profile' value='m/f/a'>
+  <p>4 LETTER PERSONALITY </p>
+  <p>Click <a href="https://www.16personalities.com/free-personality-test" target="_blank">here</a> to find your 4 letter personality. </p>
+  <input type='text' id='personality-profile' value='aaaa'>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+
+var user = {
+  username : 'sampleUN',
+  email : 'sampleE',
+  phoneNumber : 0,
+  name : 'sampleN',
+  age : 0,
+  gender : 'sampleGen',
+  genderPreference : 'sampleGenPref',
+  personality : 'samplePers'
+};
+
+
+// updates user information in the database
+function updateUser(){
+  updateUserHelper(); // gets all html and puts it into user
+  var jsonString = JSON.stringify(user); // converts into json string
+  $.ajax({ //udpate the database
+        type: "POST",
+        url: "get-profile.php",
+        data: {data : jsonString},
+        cache: false,
+        success: function(){
+            console.log(this.response);
+        }
+    });
+
+}
+
+// helper function for updateUser
+// given text input from HTML, updates var username
+function updateUserHelper(){
+  user.username = document.getElementById('username-profile').value;
+  user.email = document.getElementById('email-profile').value;
+  user.phoneNumber = document.getElementById('phone-number-profile').value ;
+  user.name = document.getElementById('name-profile').value;
+  user.age = document.getElementById('age-profile').value ;
+  user.gender = document.getElementById('gender-profile').value;
+  user.genderPreference = document.getElementById('genderPreference-profile').value;
+  user.personality = document.getElementById('personality-profile').value;
+}
+
+
+
+// goes in database and gets user, updates html by calling updateProfileHTML
+function getUser(){
+  var username = document.getElementById('username-profile').value;
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onload = function(){
+    console.log(this.response);
+    var ret = this.response;
+    var temp_user = JSON.parse(ret);
+    user.username = temp_user.username;
+    user.email = temp_user.email;
+    user.phoneNumber = temp_user.phoneNumber;
+    user.name = temp_user.name;
+    user.age = temp_user.age;
+    user.gender = temp_user.gender;
+    user.genderPreference = temp_user.genderPreference;
+    user.personality = temp_user.personality;
+    updateProfileHTML();
+  }
+  xmlhttp.open("GET", "get-profile.php?q=" + username, true);
+  xmlhttp.send();
+}
+
+// helper for getUser
+// changes the html from the user, should be used after getting user
+function updateProfileHTML(){
+  document.getElementById('username-profile').value = user.username;
+  document.getElementById('email-profile').value = user.email;
+  document.getElementById('phone-number-profile').value = user.phoneNumber;
+  document.getElementById('name-profile').value = user.name;
+  document.getElementById('age-profile').value = user.age;
+  document.getElementById('gender-profile').value = user.gender;
+  document.getElementById('genderPreference-profile').value = user.genderPreference;
+  document.getElementById('personality-profile').value = user.personality;
+}
+
+</script>

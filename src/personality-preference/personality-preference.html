@@ -60,14 +60,15 @@ function submitPersonalityPref(){
   */
   arr.push(username);
   var jsonString = JSON.stringify(arr);
-  console.log(jsonString);
+  //console.log(jsonString);
   $.ajax({
         type: "POST",
         url: "get-personality-preference.php",
         data: {data : jsonString},
         cache: false,
-        success: function(){
+        success: function(out){
             //alert("OK");
+            console.log(out);
         }
     });
   addToArr(username); // removes username after submitting
@@ -81,13 +82,14 @@ function getPersonalityPref(){
         //This is where you handle what to do with the response.
         //The actual data is found on this.responseText
         var ret = this.response;
+        //console.log(ret);
         var ppArr = JSON.parse(ret);
         //console.log(ppArr);
         var str = "";
         for(var i = 0; i < ppArr.length ; i++){
           str += " " + ppArr[i];
         }
-        console.log(str);
+
         textTemp.innerHTML =  'Selected PersonalityPref for ' + username + ' : ' + str;
     };
   xmlhttp.open("GET", "get-personality-preference.php?q=" + username, true);

@@ -1,0 +1,68 @@
+<div>
+  <input type='text' id='usernameForCompatiblePeople' value='get compatible people'>
+  <button type='button' onclick='getCompatiblePeople()'>GET COMPATIBLE PEOPLE</button>
+</div>
+<div>
+  <p> Name        Personality        Compatibility Score </p>
+</div>
+<div id='allCompatiblePeople'>
+  <button type='button' onclick='createAllCompatiblePeople()'>test createAllCompatiblePeople()</button>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+// needs to send req to PHP
+// handle req from PHP
+// creates each div
+
+var listOfPerson = [];
+listOfPerson.push(new Person('Vincent', 'ENFP' , 21, 'vincent123 '));
+listOfPerson.push(new Person('Juan', 'ISTJ' , 11, 'juan123 '));
+listOfPerson.push(new Person('Felix', 'ISTP' , 5, 'vincent123'));
+
+function Person(name, pers, score, username){
+  this.name = name;
+  this.personality = pers;
+  this.score = score;
+  this.username = username;
+}
+
+function createAllCompatiblePeople(){
+  var len = listOfPerson.length;
+  for(var i = 0; i < len; i++){
+    createSinglePersonOnList(listOfPerson[i]);
+  }
+}
+
+function createSinglePersonOnList(person){
+  $('#' + 'allCompatiblePeople')
+    .append(
+      $('<div/>')
+        .attr({
+          id: person.username + '-div'
+        })
+        .append(
+          $('<p>')
+            .html(person.name + "   " + person.personality + "   " + person.score )
+        )
+    )
+}
+
+function getCompatiblePeople(){
+  var username = document.getElementById('usernameForCompatiblePeople').value;
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onload = function() {
+        //This is where you handle what to do with the response.
+        //The actual data is found on this.responseText
+        /*
+        var ret = this.response;
+        var ppArr = JSON.parse(ret);
+        console.log(ppArr);
+        */
+    };
+  xmlhttp.open("GET", "compatible.php?g=" + username, true);
+  xmlhttp.send();
+}
+
+
+</script>
