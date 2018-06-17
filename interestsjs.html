@@ -1,0 +1,88 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+var arr = [];
+
+function showHint(str) {
+    if (str.length == 0) {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "interestsjs.php?interest=" + str, true);
+        xmlhttp.send();
+    }
+}
+
+function insertInterest(){
+  var interest = document.getElementById('i').value;
+  var user = document.getElementById('username').value;
+  arr = [user,interest];
+  var jsonString = JSON.stringify(arr);
+  console.log(jsonString);
+  $.ajax({
+      type: "POST",
+      url: "interestsjs.php",
+      dataType: 'json',
+      data: {data:jsonString},
+      cache: false,
+
+      success: function(out){
+        console.log(out);
+        var array =[];
+        out.forEach(function(element) {
+          array.push(element[0]);
+        });
+
+        document.getElementById("demo").innerHTML = JSON.stringify(array);
+      //  console.log(JSON.parse(out));
+/*
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              var intObj = JSON.parse(this.responseText);
+              console.log(this.responseText);
+              var ul = document.createElement('ul');
+              document.getElementById('listInterest').appendChild(ul);
+
+              intObj.forEach(function(int){
+                var li = document.createElement('li');
+                ul.appendChild(li);
+                li.innerHTML += int;
+              })
+            }
+        };
+        xmlhttp.open("GET", "interestsjs.php", true);
+        xmlhttp.send();
+
+*/
+},
+      error: function(xhr,status,error){
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+
+      }
+  });
+}
+
+</script>
+</head>
+</html>
+<p>Username:<input type="text" id='username'></p>
+<p><b> Insert interest into input field below</b></p>
+<form>
+  Interest:<input type="text" id='i' onkeyup="showHint(this.value)"><button type="button" onclick='insertInterest()'>Insert</button>
+</form>
+<p>Suggestions: <span id="txtHint"></span></p>
+<p>Your Interests</p>
+<p id="demo"></p>
+</body>
+</html>
