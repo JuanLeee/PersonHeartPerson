@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!-- program runs through main.php, linked to this doc index.html, with this doc linked to:
+	mystyles.css
+	login.php
+	signup.php
+	signupconfirmation.html
+	homepage.html -->
+
+	<html>
+	<head>
+		<!-- maybe eventually this will be the home linker page -->
+		<title>PersonHeartPerson</title>
+		<link type="text/css" rel="stylesheet" href="php.css"/>
+		<meta name="PersonHeartPerson" content="Tinder with interests">
+		<meta name="keywords" content="PersonHeartPerson, Tinder, Person, Heart">
+		<meta name="author" content="Felix He">
+		<!-- following is for auto adjustment to screen size -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body>
+
+		<div id="nav-placeholder" style="position:absolute;">
+		</div>
+<div style="position:relative; top: 100px; left: 50px;">		
+		<!-- log in form -->
+		<!-- Button to open the modal login form -->
+		<button onclick="document.getElementById('id01').style.display='block'">Login</button>
+
+		<!-- The Modal -->
+		<div id="id01" class="modal">
+			<!--the close button -->
+			<span onclick="document.getElementById('id01').style.display='none'"
+			class="close" title="Close Modal">&times;</span>
+
+			<!-- Modal Content -->
+			<div class="modal-content animate container" >
+
+
+					<label for="username"><b>Username</b></label>
+					<input type="text" placeholder="Enter Username" id="username" name="username" required>
+
+					<label for="pw"><b>Password</b></label>
+					<input type="password" placeholder="Enter Password" id="pw" name="pw" required>
+
+					<button type="submit">Login</button>
+					<label>
+						<input type="checkbox" checked="checked" name="remember"> Remember me
+					</label>
+
+				<!-- for the footer of the form -->
+				<div class="container" style="background-color:#f1f1f1">
+					<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- sign up form -->
+		<!-- Button to open the modal login form -->
+		<button onclick="document.getElementById('id02').style.display='block'">Sign Up</button>
+
+		<!-- The Modal -->
+	<div id="id02" class="modal">
+			<!--the close button -->
+			<span onclick="document.getElementById('id02').style.display='none'"
+			class="close" title="Close Modal">&times;</span>
+
+			<!-- Modal Content -->
+
+				<div class="modal-content animate container">
+					<h1>Sign Up</h1>
+					<p>Please fill in this form to create an account.</p>
+
+					<hr>
+
+					<label for="email"><b>Email</b></label>
+					<label>
+						<input type="button" value="Check Availability" onclick="checkAvailableEmail()"/>
+						<span id ="emailAvailability"></span>
+					</label>
+					<input type="email" placeholder="Enter Email" id="email" name="email" required>
+
+					<label for="uname"><b>Username</b></label>
+					<label>
+						<input type="button" value="Check Availability" onclick="checkAvailableUserName()"/>
+						<span id ="usernameAvailability"></span>
+					</label>
+					<input type="text" placeholder="Enter Username" id="uname" name="uname" required>
+
+					<label for="psw1"><b>Password</b></label>
+					<input type="password" placeholder="Enter Password" id="psw1" name="psw1" required>
+
+					<label for="psw2"><b>Confirm Password</b></label>
+					<input type="password" placeholder="Confirm Password" id="psw2" name="psw2" required>
+
+					<button onclick="signup()">Sign Up</button>
+
+				</div>
+
+				<!-- for the footer of the form -->
+				<div class="container" style="background-color:#f1f1f1">
+					<button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+				</div>
+	</div>
+</div>
+
+		<!-- script to auto-close when click on outside -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script>
+// create NavBar
+$(function(){
+  $("#nav-placeholder").load("NavBar.html");
+});
+
+
+// Get the modals
+var modal = document.getElementById('id01');
+var modal2 = document.getElementById('id02');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+	if (event.target == modal) {
+		modal.style.display = "none";
+	} else if (event.target == modal2) {
+		modal2.style.display = "none";
+	}
+}
+
+function signup(){
+	var email = document.getElementById('email').value;
+	var username = document.getElementById('uname').value;
+	var pw1 = document.getElementById('psw1').value;
+	var pw2 = document.getElementById('psw2').value;
+
+	if (pw1 != pw2){
+		alert("passwords don't match ");
+		return;
+	}
+
+	var arr = [username ,pw1 , email];
+	var jsonString = JSON.stringify(arr);
+	$.ajax({
+				type: "POST",
+				url: "signup.php",
+				data: {data : jsonString},
+				cache: false,
+				success: function(out){
+						if(out != ''){
+							alert("failed signup. username or email taken");
+						}
+				}
+		});
+
+}
+
+
+</script>
+
+<hr>
+
+<!-- insert landing opening page beautification here -->
+
+</body>
