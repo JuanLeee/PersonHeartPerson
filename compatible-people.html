@@ -1,0 +1,170 @@
+<div id="nav-placeholder" style="position:absolute;">
+</div>
+<div style="position:relative; top: 100px; left: 50px;">
+  <div >
+    <input type='text' id='usernameForCompatiblePeople' value='get compatible people' readonly>
+    <button type='button' onclick='getCompatiblePeople()'>GET COMPATIBLE PEOPLE</button>
+  </div>
+  <div>
+    <p> Name        Personality        Compatibility Score </p>
+  </div>
+  <div id='allCompatiblePeople'>
+    <button type='button' onclick='createAllCompatiblePeople()'>test createAllCompatiblePeople()</button>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+
+// get NavBar
+$(function(){
+  $("#nav-placeholder").load("NavBar.html");
+});
+
+//handle login
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+      }
+  }
+  return "";
+}
+
+function updateLoggedInUser(){
+  document.getElementById("usernameForCompatiblePeople").value = getCookie('username');
+}
+
+updateLoggedInUser();
+
+
+// needs to send req to PHP
+// handle req from PHP
+// creates each div
+
+var listOfPerson = [];
+
+function Person(username, name, photo, pers, score ){
+  this.username = username;
+  this.name = name;
+  this.photo = photo;
+  this.personality = pers;
+  this.score = score;
+}
+
+function createAllCompatiblePeople(){
+  var len = listOfPerson.length;
+  for(var i = 0; i < len; i++){
+    createSinglePersonOnList(listOfPerson[i]);
+  }
+}
+
+function createSinglePersonOnList(person){
+  $('#' + 'allCompatiblePeople')
+    .append(
+      $('<div/>')
+        .attr({
+          id: person.username + '-div'
+        })
+        .css({
+          'position': "relative"
+        })
+        .append(
+          $('<p>')
+            .css({
+              'position': "inline"
+            })
+            .html(person.username + "   name: " + person.name + "   photo: " + person.photo + "   personality: "  + person.personality + "   score: " + person.score )
+        )
+        .append(
+          $('<button/>')
+            .attr({
+              id: person.username + '-button',
+              value: person.username
+            })
+            .css({
+              'position': "inline",
+              'right': "30%"
+            })
+            .text('match with ' + person.username)
+            .click(function(){
+              createMatch(person.username);
+            })
+        )
+    )
+}
+
+function getCompatiblePeople(){
+  var username = document.getElementById('usernameForCompatiblePeople').value;
+  console.log(username);
+
+
+  // creates tables that do the matches
+  var xmlhttppost = new XMLHttpRequest();
+  xmlhttppost.onload = function() {
+      // do nothing
+
+      var xmlhttpget = new XMLHttpRequest();
+      xmlhttpget.onload = function() {
+            //This is where you handle what to do with the response.
+            //The actual data is found on this.responseText
+            var ret = this.response;
+            console.log(this.response);
+            var ppArr = [];
+            try{
+                ppArr = JSON.parse(ret);
+            }  catch(err) {
+              console.log(ppArr);
+            }
+
+            for(var i =0; i<ppArr.length  ; i++){
+              var curr = ppArr[i];
+              listOfPerson.push(new Person(curr[0], curr[1], curr[2], curr[3]
+              ,curr[4]));
+            }
+            createAllCompatiblePeople();
+
+        };
+      xmlhttpget.open("GET", "get-compatibility.php?g=" + username, true);
+      xmlhttpget.send();
+    };
+  xmlhttppost.open("POST", "get-compatibility.php?p=" + username, true);
+  xmlhttppost.send();
+
+  // gets stuff from the table
+
+
+
+}
+
+
+function createMatch(par){
+  var username = document.getElementById('usernameForCompatiblePeople').value;
+  var arr = [username,par];
+  var jsonString = JSON.stringify(arr);
+  console.log(jsonString);
+  $.ajax({
+      type: "POST",
+      url: "get-compatibility.php",
+      dataType: 'json',
+      data: {datamatch:jsonString},
+      cache: false,
+      success: function(out){
+        console.log(out);
+},
+      error: function(xhr,status,error){
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+      }
+  });
+}
+
+
+</script>
