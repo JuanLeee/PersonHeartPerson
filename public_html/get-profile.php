@@ -50,23 +50,43 @@ function executeBoundSQL($cmdstr, $list) {
 }
 
 if ($db_conn) {
+// handles update user NOT TESTED
+executePlainSQL($sqlcmd);
+$data = json_decode($_POST["data"], true);
+if ($data != NULL){
+		$username = $data['username'];
 
-// handles login
+		$sqlcmd = "update account set gender = '". $data['gender']. "', "
+								. "genderPreference = '" . $data['genderPreference'] . "', "
+								. "aname = '" . $data['name'] . "', "
+								. "email = '" . $data['email'] . "', "
+								. "phoneno = '" . $data['phoneNumber'] . "', "
+								. "personality = '" . $data['personality'] . "' "
+								. " where username = '". $username ."'";
+		executePlainSQL($sqlcmd);
+  	OCICommit($db_conn);
+
+}
+
+
+
+// handles getting profile information given personality NOT TESTED
 $q = $_REQUEST["q"];
 if ($q != NULL){
-  $ret = executePlainSQL("select upassword from account where username = '" . $q . "'");
+  $ret = executePlainSQL("select * from account where username = '" . $q . "'");
+  $ppArray = array();
   while ($row = OCI_Fetch_Array($ret, OCI_NUM)) {
-    echo json_encode($row); // not sure this works
-  }
+		echo json_encode($row); // not sure this works
+	}
+	//echo json_encode($q);
 }
-;
 
 
 
 // end of handle javascript
 	if ($_POST && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
-		header("location: login.php");
+		header("location: get-profile.php");
 	} else {
 		// Select data...
 		$result = executePlainSQL("select * from tab1");

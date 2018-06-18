@@ -1,3 +1,4 @@
+
 <?php
 
 $success = True;
@@ -51,22 +52,44 @@ function executeBoundSQL($cmdstr, $list) {
 
 if ($db_conn) {
 
-// handles login
+// handles choosing personality preference
+$data = json_decode(stripslashes($_POST['data']));
+$len = sizeof($data);
+$username = $data[$len -1];
+
+if ($username != NULL){
+  //executePlainSQL("insert into tab1 values ( '" . $username .  "', '" . $data[$try] . "')");
+  global $db_conn, $success;
+  for($i=0 ; $i< ($len-1) ; $i++ ){
+
+    //  $sqlcmd = "insert into checkoff values ( '" . $username .  "', '" . $data[$i] . "')";
+    //  $statement = OCIParse($db_conn, $sqlcmd);
+    //  $r = OCIExecute($statement, OCI_COMMIT_ON_SUCCESS);
+
+			//echo 'hello';
+			$sqlcmd = "insert into checkoff values ( '" .  $data[$i].  "', '" . $username . "')";
+			executePlainSQL($sqlcmd);
+    }
+  OCICommit($db_conn);
+}
+
+// handles getting personality preference given username//
 $q = $_REQUEST["q"];
 if ($q != NULL){
-  $ret = executePlainSQL("select upassword from account where username = '" . $q . "'");
-  while ($row = OCI_Fetch_Array($ret, OCI_NUM)) {
-    echo json_encode($row); // not sure this works
-  }
+  $ret = executePlainSQL("select * from checkoff where username = '" . $q . "'");
+  $ppArray = array();
+  while ($row = OCI_Fetch_Array($ret, OCI_BOTH)) {
+		array_push($ppArray, $row["PCODE"]); //or just use "echo $row[0]"
+	}
+  echo json_encode($ppArray);
 }
-;
 
 
 
 // end of handle javascript
 	if ($_POST && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
-		header("location: login.php");
+		header("location: get-personality-preference.php");
 	} else {
 		// Select data...
 		$result = executePlainSQL("select * from tab1");

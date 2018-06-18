@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Tech And All.com - Flat Color CSS Drop Menu</title>
+        <link rel="stylesheet" href="navbar_techandall.css"> <!-- Navigation CSS -->
+        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    </head>
+
+<body bgcolor="#333333">
+<div class="container">
+<div>
+              <label class="mobile_menu" for="mobile_menu">
+              <span>Menu</span>
+              </label>
+              <input id="mobile_menu" type="checkbox">
+              <ul class="nav">
+              <li><a href="profile.html"><i class="icon-heart icon-large"></i></a></li>
+
+
+        <!----- Regular Menu Button ---->
+          <li><a href="personality-preference.html"> PersonalityPreference</a></li>
+        <!----- Regular Menu Button Ends---->
+
+
+          <!----- Regular Menu Button ---->
+               <li><a href="interestsjs.html"> Interests</a></li>
+          <!----- Regular Menu Button Ends---->
+
+
+          <!----- Regular Menu Button ---->
+               <li><a href="compatible-people.html"> Find Matches</a></li>
+          <!----- Regular Menu Button Ends---->
+
+                <!----- Regular Menu Button ---->
+               <li><a href="compatible-people.html"> All Matches</a></li>
+          <!----- Regular Menu Button Ends---->
+
+
+          <!----- LOGIN HERE---->
+
+             <li class="search" id='login-div'>
+                <p  class="icon-large nav-text" style="font-family : Arial" >Username</p>
+                 <i  class="icon-large"></i><input id='login-username' type="text" ></input>
+                 <p  class="icon-large nav-text" style="font-family : Arial" >Password</p>
+                 <i  class="icon-large "></i><input id='login-password' type="text" ></input>
+                 <button type='button' class='button' id='login-button' onclick='login()'>LOGIN</button>
+
+             </li>
+
+
+             <li class="search" id='logout-div'>
+                 <p id='logout-username' class="icon-large nav-text" style="font-family : Arial" >Username</p>
+                 <button type='button' class='button' id='logout-button' onclick='logout()'>LOGOUT</button>
+             </li>
+
+          </ul>
+        </div>
+      </div>
+    </body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+  function login(){
+    var username = document.getElementById('login-username').value;
+    var password = document.getElementById('login-password').value;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onload = function(){
+      var ret = JSON.parse(this.response);
+      var strret = ret.toString();
+      var len = password.length;
+      var check = strret.replace(/\s/g,'');
+      console.log(strret);
+      if (check == password){
+        setCookie(username);
+        handleLoggedIn();
+        $('#logout-div').show();
+        $('#login-div').hide();
+        location.reload();
+      }
+    }
+    xmlhttp.open("GET", "login.php?q=" + username, true);
+    xmlhttp.send();
+  };
+
+  function logout(){
+    delete_cookie('username');
+    $('#logout-div').hide();
+    $('#login-div').show();
+    location.reload();
+  };
+
+  function setCookie(uname) {
+    document.cookie = 'username=' + uname +'; Path=/;';
+  }
+
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+  }
+
+  function delete_cookie(name) {
+  document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+  function checkCookie() {
+    var username = getCookie("username");
+    alert(username);
+}
+// handles if account already logged in
+function handleLoggedIn(){
+  if (getCookie('username') != ''){
+    document.getElementById('logout-username').innerHTML = getCookie('username');
+    $('#logout-div').show();
+    $('#login-div').hide();
+  }
+}
+
+
+   $('#logout-div').hide();
+   handleLoggedIn();
+
+</script>

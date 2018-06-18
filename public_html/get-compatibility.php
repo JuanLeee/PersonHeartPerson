@@ -1,3 +1,4 @@
+
 <?php
 
 $success = True;
@@ -51,22 +52,67 @@ function executeBoundSQL($cmdstr, $list) {
 
 if ($db_conn) {
 
-// handles login
-$q = $_REQUEST["q"];
-if ($q != NULL){
-  $ret = executePlainSQL("select upassword from account where username = '" . $q . "'");
-  while ($row = OCI_Fetch_Array($ret, OCI_NUM)) {
-    echo json_encode($row); // not sure this works
-  }
+// handles getting personality preference given username//
+$p = $_REQUEST["p"];
+
+if ($p != NULL){
+	executePlainSQL("drop table info cascade constraints");
+	executePlainSQL("drop table myInterest cascade constraints");
+	executePlainSQL("drop table possibleMatches cascade constraints");
+  $sql1 ="
+					create table info
+					AS
+					select username, gender, genderPreference ,personality, city, province
+					from account
+					where username='" . $p . "'
+					";
+  executePlainSQL($sql1);
+
+	$sql2 ="
+					create table myInterest
+					AS
+					select *
+					from has
+					where username ='" . $p . "'
+					";
+	executePlainSQL($sql2);
+
+	$sql3 ="
+					create table possibleMatches
+					AS
+					select A.username, C.pcode
+					from checkOff C , account A, info I
+					where I.gender = A.genderPreference AND I.genderPreference = A.gender AND I.city = A.city AND I.province = A.province
+					AND c.username ='" . $p . "' AND C.pcode = A.personality
+					";
+	executePlainSQL($sql3);
 }
-;
+//
+$g = $_REQUEST["g"];
+if ($g != NULL){
+	//$sql2 = 'select * from possibleMatches';
+
+  $sql2 ="select PM.username, COUNT(*) AS Score
+          from possibleMatches PM, has H, myInterest MI
+          where PM.username = H.username AND MI.iname = H.iname AND
+          PM.username IN (select PMA.username
+                from possibleMatches PMA, checkOff C, info I
+                where PMA.username = C.username and I.personality = C.pcode)
+          GROUP BY PM.username";
+
+
+  $ret = executePlainSQL($sql2);
+	while ($row = OCI_Fetch_Array($ret, OCI_NUM)) {
+		echo json_encode($row); // not sure this works
+	}
+}
 
 
 
 // end of handle javascript
 	if ($_POST && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
-		header("location: login.php");
+		header("location: get-compatibility.php");
 	} else {
 		// Select data...
 		$result = executePlainSQL("select * from tab1");
