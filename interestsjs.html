@@ -1,0 +1,153 @@
+<html>
+<head>
+</head>
+</html>
+<div id="nav-placeholder" style="position:absolute;"></div>
+<div style="position:relative; top: 100px; left: 50px;">
+  <p>Username:<input type="text" id='username' readonly></p>
+  <p><b> Insert interest into input field below</b></p>
+  <form>
+    Interest:<input type="text" id='i' onkeyup="showHint(this.value)">
+    <button type="button" onclick='insertInterest()'>Insert</button>
+    <button type="button" onclick='deleteInterest()'>Delete</button>
+  </form>
+  <p>Suggestions: <span id="txtHint"></span></p>
+  <p>Your Interests</p>
+  <p id="demo"></p>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+// create NavBar
+$(function(){
+  $("#nav-placeholder").load("NavBar.html");
+});
+//logs in
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+      }
+  }
+  return "";
+}
+
+function updateLoggedInUser(){
+  document.getElementById("username").value = getCookie('username');
+  insertInterest();
+}
+
+updateLoggedInUser();
+
+// does everything else
+var arr = [];
+
+function showHint(str) {
+    if (str.length == 0) {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "interestsjs.php?interest=" + str, true);
+        xmlhttp.send();
+    }
+}
+function deleteInterest(){
+  var interest = document.getElementById('i').value;
+  var user = document.getElementById('username').value;
+  arr = [user,interest];
+  var jsonString = JSON.stringify(arr);
+  console.log(jsonString);
+  $.ajax({
+      type: "POST",
+      url: "interestsjs.php",
+      dataType: 'json',
+      data: {datadelete:jsonString},
+      cache: false,
+
+      success: function(out){
+        console.log(out);
+        var array =[];
+        out.forEach(function(element) {
+          array.push(element[0]);
+        });
+
+        document.getElementById("demo").innerHTML = JSON.stringify(array);
+},
+      error: function(xhr,status,error){
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+
+      }
+  });
+}
+
+function insertInterest(){
+  var interest = document.getElementById('i').value;
+  var user = document.getElementById('username').value;
+  arr = [user,interest];
+  var jsonString = JSON.stringify(arr);
+  console.log(jsonString);
+  $.ajax({
+      type: "POST",
+      url: "interestsjs.php",
+      dataType: 'json',
+      data: {data:jsonString},
+      cache: false,
+
+      success: function(out){
+        console.log(out);
+        var array =[];
+        out.forEach(function(element) {
+          array.push(element[0]);
+        });
+
+        document.getElementById("demo").innerHTML = JSON.stringify(array);
+      //  console.log(JSON.parse(out));
+/*
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              var intObj = JSON.parse(this.responseText);
+              console.log(this.responseText);
+              var ul = document.createElement('ul');
+              document.getElementById('listInterest').appendChild(ul);
+
+              intObj.forEach(function(int){
+                var li = document.createElement('li');
+                ul.appendChild(li);
+                li.innerHTML += int;
+              })
+            }
+        };
+        xmlhttp.open("GET", "interestsjs.php", true);
+        xmlhttp.send();
+
+*/
+},
+      error: function(xhr,status,error){
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+
+      }
+  });
+}
+
+</script>
+
+</html>
