@@ -1,7 +1,56 @@
 <html>
 <head>
+  <div id="nav-placeholder" style="position:absolute;"></div>
+  <div style="position:relative; top: 100px; left: 50px;">
+    <form>
+      Your Username:<input type="text" id='username'>
+      <button type="button" onclick='findinterests()'>Insert</button>
+    </form>
+    <p>Your Matches</p>
+    <table id="myTable">
+      <tr>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Phone Number</td>
+      </tr>
+    </table>
+    <br>
+</div>
+  </body>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
+//initialize
+// create NavBar
+$(function(){
+  $("#nav-placeholder").load("NavBar.html");
+});
+//logs in
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+      }
+  }
+  return "";
+}
+
+function updateLoggedInUser(){
+  document.getElementById("username").value = getCookie('username');
+}
+
+updateLoggedInUser();
+
+
+
+// do others
 var arr = [];
 
 
@@ -64,19 +113,4 @@ function findinterests(){
 
 </script>
 </head>
-</html>
-<form>
-  Interest:<input type="text" id='username'>
-  <button type="button" onclick='findinterests()'>Insert</button>
-</form>
-<p>Your Matches</p>
-<table id="myTable">
-  <tr>
-    <td>Name</td>
-    <td>Email</td>
-    <td>Phone Number</td>
-  </tr>
-</table>
-<br>
-</body>
 </html>
