@@ -72,9 +72,30 @@ function createSinglePersonOnList(person){
         .attr({
           id: person.username + '-div'
         })
+        .css({
+          'position': "relative"
+        })
         .append(
           $('<p>')
+            .css({
+              'position': "inline"
+            })
             .html(person.username + "   name: " + person.name + "   photo: " + person.photo + "   personality: "  + person.personality + "   score: " + person.score )
+        )
+        .append(
+          $('<button/>')
+            .attr({
+              id: person.username + '-button',
+              value: person.username
+            })
+            .css({
+              'position': "inline",
+              'right': "30%"
+            })
+            .text('match with ' + person.username)
+            .click(function(){
+              createMatch(person.username);
+            })
         )
     )
 }
@@ -120,6 +141,11 @@ function getCompatiblePeople(){
 
 
 
+}
+
+
+function createMatch(par){
+  alert(par);
 }
 
 
