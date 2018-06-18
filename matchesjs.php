@@ -86,8 +86,7 @@ function printResult($result) { //prints results from a select statement
 
 // Connect Oracle...
 if ($db_conn) {
-
-$matchusername = array();
+	$matchusername = array();
 
 $data = json_decode(stripslashes($_POST['data']));
 $len = sizeof($data);
@@ -96,10 +95,10 @@ if($len > 0){
 
 	$username = $data[0];
 
-	$UsernameMatch = executePlainSQL("select username2 from match where username1 = '$username'");
+	$UsernameMatch = executePlainSQL("select username2 from matches where username1 = '$username'");
 
 	while ($row = OCI_Fetch_Array($UsernameMatch, OCI_BOTH)) {
-		$UsernameBack = executePlainSQL("select username2 from match where username1 = '$row[0]' and username2 = '$username'");
+		$UsernameBack = executePlainSQL("select username2 from matches where username1 = '$row[0]' and username2 = '$username'");
 
 		if($row2 = OCI_Fetch_Array($UsernameBack, OCI_BOTH)){
 			$accountmatch = executePlainSQL("select * from account where username = '$row[0]'");
@@ -108,6 +107,7 @@ if($len > 0){
 			}
 		}
 	}
+
 
 		echo json_encode($matchusername);
 
@@ -120,7 +120,7 @@ if($len > 0){
 
 
 
-	}
+
 
 
 
@@ -131,7 +131,7 @@ if($len > 0){
 
 
   //check if connection is successful
-  if ($_POST && $_GET && $success) {
+  if ($_GET && $success) {
     //POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
     header("location: matchesjs.php");
   }
