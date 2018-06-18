@@ -71,31 +71,48 @@ var user = {
 
 // updates user information in the database
 function updateUser(){
-  updateUserHelper(); // gets all html and puts it into user
-  var jsonString = JSON.stringify(user); // converts into json string
-  //var jsonString = JSON.stringify(['a','b','c']);
-  console.log(jsonString);
-  $.ajax({ //update the database
-        type: "POST",
-        url: "get-profile.php",
-        data: {data : jsonString},
-        cache: false,
-        success: function(){
-            console.log();
-        }
-    });
+  if(updateUserHelper()){ // gets all html and puts it into user
+    var jsonString = JSON.stringify(user); // converts into json string
+    //var jsonString = JSON.stringify(['a','b','c']);
+    console.log(jsonString);
+    $.ajax({ //update the database
+          type: "POST",
+          url: "get-profile.php",
+          data: {data : jsonString},
+          cache: false,
+          success: function(){
+              console.log();
+          }
+      });
+  }
 }
 
 // helper function for updateUser
 // given text input from HTML, updates var username
 function updateUserHelper(){
+
+
   user.username = document.getElementById('username-profile').value;
   user.email = document.getElementById('email-profile').value;
-  user.phoneNumber = document.getElementById('phone-number-profile').value ;
   user.name = document.getElementById('name-profile').value;
-  user.gender = document.getElementById('gender-profile').value;
-  user.genderPreference = document.getElementById('gender-preference-profile').value;
+
   user.personality = document.getElementById('personality-profile').value;
+  if (parseInt(document.getElementById('phone-number-profile').value)){
+    user.phoneNumber = document.getElementById('phone-number-profile').value ;
+  } else {
+    alert('phone number is not an integer');
+    return false;
+  }
+  var inputGender = document.getElementById('gender-profile').value;
+  var inputGenderPref = document.getElementById('gender-preference-profile').value;
+  if ((inputGender== "F" || inputGender == "M") && (inputGenderPref== "F" || inputGenderPref == "M")){
+    user.gender = inputGender;
+    user.genderPreference = inputGenderPref;
+  } else {
+    alert('gender and gender preference has to be one letter: F/M');
+    return false;
+  }
+  return true;
 }
 
 

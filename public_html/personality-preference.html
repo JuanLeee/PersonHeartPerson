@@ -29,13 +29,13 @@
     <button type="button" onclick='addToArr("ESFP")'>ESFP</button>
   </div>
   <div>
-    <input type='text' id='username' value='insert username here'>
+    <input type='text' id='username' value='insert username here' readonly>
     <button type='button' onclick='submitPersonalityPref()'>SUBMIT</button>
   </div>
 </div>
 
 <div style="position:relative; top: 200px; left:200px;">
-  <input type='text' id='usernameForPP' value='get PP for this user'>
+  <input type='text' id='usernameForPP' value='get PP for this user' readonly>
   <button type='button' onclick='getPersonalityPref()'>GET</button>
   <p id='personalityPrefSelected'>Selected PersonalityPref:</p>
 </div>
@@ -67,7 +67,7 @@ function getCookie(cname) {
 function updateLoggedInUser(){
   document.getElementById("username").value = getCookie('username');
   document.getElementById("usernameForPP").value = getCookie('username');
-  
+
   getPersonalityPref();
 }
 
