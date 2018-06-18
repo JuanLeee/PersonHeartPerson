@@ -50,11 +50,12 @@ updateLoggedInUser();
 
 var listOfPerson = [];
 
-function Person(name, pers, score, username){
+function Person(username, name, photo, pers, score ){
+  this.username = username;
   this.name = name;
+  this.photo = photo;
   this.personality = pers;
   this.score = score;
-  this.username = username;
 }
 
 function createAllCompatiblePeople(){
@@ -73,7 +74,7 @@ function createSinglePersonOnList(person){
         })
         .append(
           $('<p>')
-            .html(person.username + "   " + person.personality + "   " + person.score )
+            .html(person.username + "   name: " + person.name + "   photo: " + person.photo + "   personality: "  + person.personality + "   score: " + person.score )
         )
     )
 }
@@ -94,10 +95,17 @@ function getCompatiblePeople(){
             //The actual data is found on this.responseText
             var ret = this.response;
             console.log(this.response);
+            var ppArr = [];
+            try{
+                ppArr = JSON.parse(ret);
+            }  catch(err) {
+              console.log(ppArr);
+            }
 
-            var ppArr = JSON.parse(ret);
-            for(var i =0; i<ppArr.length -1 ; i+=2){
-              listOfPerson.push(new Person('name','   with the score of :  ',ppArr[i+1], ppArr[i] ));
+            for(var i =0; i<ppArr.length  ; i++){
+              var curr = ppArr[i];
+              listOfPerson.push(new Person(curr[0], curr[1], curr[2], curr[3]
+              ,curr[4]));
             }
             createAllCompatiblePeople();
 

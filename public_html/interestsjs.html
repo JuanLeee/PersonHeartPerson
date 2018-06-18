@@ -7,7 +7,9 @@
   <p>Username:<input type="text" id='username' readonly></p>
   <p><b> Insert interest into input field below</b></p>
   <form>
-    Interest:<input type="text" id='i' onkeyup="showHint(this.value)"><button type="button" onclick='insertInterest()'>Insert</button>
+    Interest:<input type="text" id='i' onkeyup="showHint(this.value)">
+    <button type="button" onclick='insertInterest()'>Insert</button>
+    <button type="button" onclick='deleteInterest()'>Delete</button>
   </form>
   <p>Suggestions: <span id="txtHint"></span></p>
   <p>Your Interests</p>
@@ -61,6 +63,36 @@ function showHint(str) {
         xmlhttp.open("GET", "interestsjs.php?interest=" + str, true);
         xmlhttp.send();
     }
+}
+function deleteInterest(){
+  var interest = document.getElementById('i').value;
+  var user = document.getElementById('username').value;
+  arr = [user,interest];
+  var jsonString = JSON.stringify(arr);
+  console.log(jsonString);
+  $.ajax({
+      type: "POST",
+      url: "interestsjs.php",
+      dataType: 'json',
+      data: {datadelete:jsonString},
+      cache: false,
+
+      success: function(out){
+        console.log(out);
+        var array =[];
+        out.forEach(function(element) {
+          array.push(element[0]);
+        });
+
+        document.getElementById("demo").innerHTML = JSON.stringify(array);
+},
+      error: function(xhr,status,error){
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+
+      }
+  });
 }
 
 function insertInterest(){

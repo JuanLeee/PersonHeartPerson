@@ -59,6 +59,8 @@ if ($p != NULL){
 	executePlainSQL("drop table info cascade constraints");
 	executePlainSQL("drop table myInterest cascade constraints");
 	executePlainSQL("drop table possibleMatches cascade constraints");
+	executePlainSQL("drop table sortedMatches cascade constraints");
+
   $sql1 ="
 					create table info
 					AS
@@ -66,6 +68,7 @@ if ($p != NULL){
 					from account
 					where username='" . $p . "'
 					";
+
   executePlainSQL($sql1);
 
 	$sql2 ="
@@ -78,33 +81,48 @@ if ($p != NULL){
 	executePlainSQL($sql2);
 
 	$sql3 ="
-					create table possibleMatches
-					AS
-					select A.username, C.pcode
-					from checkOff C , account A, info I
-					where I.gender = A.genderPreference AND I.genderPreference = A.gender AND I.city = A.city AND I.province = A.province
-					AND c.username ='" . $p . "' AND C.pcode = A.personality
+				create table possibleMatches
+				AS
+				select A.username, C.pcode
+				from checkOff C , account A, info I
+				where I.gender = A.genderPreference AND I.genderPreference = A.gender AND I.city = A.city AND I.province = A.province
+				AND c.username ='" . $p ."' AND C.pcode = A.personality
+				ORDER BY A.username
 					";
 	executePlainSQL($sql3);
+
+	$sql4 ="
+					create table sortedMatches
+					AS
+					select PM.username, COUNT(*) AS Score
+					from possibleMatches PM, has H, myInterest MI
+					where PM.username = H.username AND MI.iname = H.iname AND
+					PM.username IN (select PMA.username
+							from possibleMatches PMA, checkOff C, info I
+							where PMA.username = C.username and I.personality = C.pcode)
+					GROUP BY PM.username
+					ORDER BY Score DESC, PM.username ASC
+					";
+		executePlainSQL($sql4);
 }
 //
 $g = $_REQUEST["g"];
 if ($g != NULL){
 	//$sql2 = 'select * from possibleMatches';
 
-  $sql2 ="select PM.username, COUNT(*) AS Score
-          from possibleMatches PM, has H, myInterest MI
-          where PM.username = H.username AND MI.iname = H.iname AND
-          PM.username IN (select PMA.username
-                from possibleMatches PMA, checkOff C, info I
-                where PMA.username = C.username and I.personality = C.pcode)
-          GROUP BY PM.username";
+  $sql2 ="select SM.username, A.aname, P.phoID as Photo, A.personality, SM.Score
+					from sortedMatches SM, Account A, pictureUpload P
+					where SM.username = A.username AND SM.username = P.username
+					ORDER BY Score DESC, SM.username ASC";
 
 
   $ret = executePlainSQL($sql2);
+	$arr = array();
 	while ($row = OCI_Fetch_Array($ret, OCI_NUM)) {
-		echo json_encode($row); // not sure this works
+		array_push($arr, $row);
+
 	}
+	echo json_encode($arr);
 }
 
 

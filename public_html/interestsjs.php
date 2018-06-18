@@ -186,6 +186,52 @@ if($len > 0){
 
 	}
 
+	$data2 = json_decode(stripslashes($_POST['datadelete']));
+	$len2 = sizeof($data2);
+
+
+	if($len2 > 0){
+
+		$username2 = $data2[0];
+		$interest2 = $data2[1];
+
+		$validUsername2 = executePlainSQL("select username from account where username = '$username2'");
+		/*
+		 $row = OCI_Fetch_Array($validUsername, OCI_BOTH);
+		 echo json_encode($row);
+		 */
+
+
+		if(OCI_Fetch_Array($validUsername2	, OCI_BOTH)){
+
+
+
+			$tuple2 = array (
+				":bind1" => $username2,
+				":bind2" => $interest2
+			);
+
+			$alltuples2 = array (
+					$tuple2
+			);
+	/*
+			$row = OCI_Fetch_Array($searchInterest, OCI_BOTH);
+	 	 	echo json_encode($row);
+	*/
+
+		  global $db_conn, $success;
+			$statement21 = OCIParse($db_conn,"delete from has where username = '$username2' and iname = '$interest2'");
+			$r21 = OCIExecute($statement21, OCI_COMMIT_ON_SUCCESS);
+			 OCICommit($db_conn);
+			$interests_user2 = executePlainSQL("select iname from has where username = '$username2'");
+			$int2 = array();
+			while($row2 = OCI_Fetch_Array($interests_user2, OCI_BOTH)){
+				array_push($int2,$row2);
+				}
+			echo json_encode($int2);
+			}
+		}
+
 
 
 
