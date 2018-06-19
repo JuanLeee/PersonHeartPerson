@@ -95,10 +95,10 @@ if($len > 0){
 
 	$username = $data[0];
 
-	$UsernameMatch = executePlainSQL("select username2 from matches where username1 = '$username'");
+	$UsernameMatch = executePlainSQL("select username2 from match where username1 = '$username'");
 
 	while ($row = OCI_Fetch_Array($UsernameMatch, OCI_BOTH)) {
-		$UsernameBack = executePlainSQL("select username2 from matches where username1 = '$row[0]' and username2 = '$username'");
+		$UsernameBack = executePlainSQL("select username2 from match where username1 = '$row[0]' and username2 = '$username'");
 
 		if($row2 = OCI_Fetch_Array($UsernameBack, OCI_BOTH)){
 			$accountmatch = executePlainSQL("select * from account where username = '$row[0]'");

@@ -2,14 +2,15 @@
 <head>
 </head>
 </html>
+<link rel="stylesheet" href="navbar.css">
 <div id="nav-placeholder" style="position:absolute;"></div>
 <div style="position:relative; top: 100px; left: 50px;">
-  <p>Username:<input type="text" id='username' readonly></p>
+  <p><input type="text" id='username' readonly></p>
   <p><b> Insert interest into input field below</b></p>
   <form>
     Interest:<input type="text" id='i' onkeyup="showHint(this.value)">
-    <button type="button" onclick='insertInterest()'>Insert</button>
-    <button type="button" onclick='deleteInterest()'>Delete</button>
+    <button type="button" onclick='insertInterest()' class='buttonPP'>Insert</button>
+    <button type="button" onclick='deleteInterest()' class='buttonPP'>Delete</button>
   </form>
   <p>Suggestions: <span id="txtHint"></span></p>
   <p>Your Interests</p>
@@ -22,6 +23,7 @@
 $(function(){
   $("#nav-placeholder").load("NavBar.html");
 });
+$('#username').hide();
 //logs in
 function getCookie(cname) {
   var name = cname + "=";

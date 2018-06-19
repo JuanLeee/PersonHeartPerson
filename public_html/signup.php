@@ -55,10 +55,10 @@ $data = json_decode(stripslashes($_POST['data']));
 $len = sizeof($data);
 $username = $data[0];
 if ($username != NULL){
-	
+
 	$sql = "insert into account values ('" .  $data[0]. "', '"
-						. $data[1] . "' , 'N' , 'N' , 'sample', '"
-						. $data[2] . "' , 'sample' , 'NA', 000, 'aaaa', 001 "
+						. $data[1] . "' , 'F' , 'F' , 'sample', '"
+						. $data[2] . "' , 'sample' , 'NA', 00000, 'ENFP', 002 "
 						. " )";
 
 	//$sql = "insert into account values ('loraine123', 'lorain123' , 'N' , 'N' , 'sample', 'loraine123@hotmail.com' , 'sample' , 'NA', 000, 'aaaa', 001 )";
@@ -67,9 +67,18 @@ if ($username != NULL){
 }
 
 
+$user = json_decode($_POST['user']);
+echo $user;
+if ($user != NULL){
+	echo 'hello in';
+	$sql = "delete from account where username ='" . $user . "'";
+	executePlainSQL($sql);
+}
+
+
 
 // end of handle javascript
-	if ($_POST && $success) {
+	if ($_POST && $success || $_GET && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
 		header("location: signup.php");
 	} else {

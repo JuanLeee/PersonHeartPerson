@@ -81,16 +81,27 @@ if ($q != NULL){
 	//echo json_encode($q);
 }
 
+$datadelete = json_decode($_POST["datadelete"], true);
+
+
+
+$lendatadelete = sizeof($datadelete);
+if ($lendatadelete > 0){
+	$username2 = $datadelete[0];
+	$password2 = $datadelete[1];
+	global $db_conn, $success;
+	$statement21 = OCIParse($db_conn,"delete from account where username = '$username2' and upassword = '$password2'");
+	$r21 = OCIExecute($statement21, OCI_COMMIT_ON_SUCCESS);
+	OCICommit($db_conn);
+	 echo json_encode("George Lucis is the best");
+}
+
 
 
 // end of handle javascript
-	if ($_POST && $success) {
+	if ($_POST && $_GET && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
 		header("location: get-profile.php");
-	} else {
-		// Select data...
-		$result = executePlainSQL("select * from tab1");
-		//printResult($result);
 	}
 
 	//Commit to save changes...

@@ -1,15 +1,20 @@
 <div id="nav-placeholder" style="position:absolute;">
 </div>
+<link rel="stylesheet" href="navbar.css">
 <div style="position:relative; top: 100px; left: 50px;">
   <div >
     <input type='text' id='usernameForCompatiblePeople' value='get compatible people' readonly>
-    <button type='button' onclick='getCompatiblePeople()'>GET COMPATIBLE PEOPLE</button>
+    <button type='button' onclick='getCompatiblePeople()' class='buttonPP'>GET COMPATIBLE PEOPLE</button>
+    <button type='button' onclick='getPersonalityCommontInterest()' class='buttonPP'>FIND PERSONALITY WITH MOST COMMON INTEREST</button>
+    <button type='button' onclick='getOptimalMatch()' class='buttonPP'>OPTIMAL MATCH</button>
   </div>
   <div>
-    <p> Name        Personality        Compatibility Score </p>
+    <p id='optimal'> Your Optimal Match:  </p>
+    <p id='pci'> Personality with most Common Interest </p>
+    <p> List Of Compatible People </p>
   </div>
   <div id='allCompatiblePeople'>
-    <button type='button' onclick='createAllCompatiblePeople()'>test createAllCompatiblePeople()</button>
+    <button id ='test-button' type='button' onclick='createAllCompatiblePeople()'>test createAllCompatiblePeople()</button>
   </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -44,6 +49,10 @@ function updateLoggedInUser(){
 updateLoggedInUser();
 
 
+//hides test Button
+$('#' + "test-button").hide();
+
+
 // needs to send req to PHP
 // handle req from PHP
 // creates each div
@@ -76,21 +85,24 @@ function createSinglePersonOnList(person){
           'position': "relative"
         })
         .append(
-          $('<p>')
+          $('<p/>')
             .css({
               'position': "inline"
             })
-            .html(person.username + "   name: " + person.name + "   photo: " + person.photo + "   personality: "  + person.personality + "   score: " + person.score )
+            .html(person.username + " |  name: " + person.name + " |    photo: " + person.photo + " |    personality: "  + person.personality + " |      score: " + person.score )
         )
         .append(
           $('<button/>')
             .attr({
               id: person.username + '-button',
-              value: person.username
+              value: person.username,
+              class: 'buttonPP'
             })
             .css({
               'position': "inline",
-              'right': "30%"
+              'width': '100px',
+              'height': '50px',
+              'font-size': "12px"
             })
             .text('match with ' + person.username)
             .click(function(){
@@ -99,21 +111,37 @@ function createSinglePersonOnList(person){
         )
     )
 }
-
+function getCompatiblePeople(){
+  var username = document.getElementById('usernameForCompatiblePeople').value;
+  var xmlhttppost = new XMLHttpRequest();
+  xmlhttppost.onload = function() {
+    var ret = this.response;
+    console.log(this.response);
+    var ppArr = [];
+    try{
+        ppArr = JSON.parse(ret);
+    }  catch(err) {
+      console.log(ppArr);
+    }
+    for(var i =0; i<ppArr.length  ; i++){
+      var curr = ppArr[i];
+      listOfPerson.push(new Person(curr[0], curr[1], curr[2], curr[3]
+      ,curr[4]));
+    }
+    createAllCompatiblePeople();
+  }
+  xmlhttppost.open("GET", "get-compatibility.php?p=" + username, true);
+  xmlhttppost.send();
+}
+/*
 function getCompatiblePeople(){
   var username = document.getElementById('usernameForCompatiblePeople').value;
   console.log(username);
-
-
   // creates tables that do the matches
   var xmlhttppost = new XMLHttpRequest();
   xmlhttppost.onload = function() {
-      // do nothing
-
       var xmlhttpget = new XMLHttpRequest();
       xmlhttpget.onload = function() {
-            //This is where you handle what to do with the response.
-            //The actual data is found on this.responseText
             var ret = this.response;
             console.log(this.response);
             var ppArr = [];
@@ -122,30 +150,65 @@ function getCompatiblePeople(){
             }  catch(err) {
               console.log(ppArr);
             }
-
             for(var i =0; i<ppArr.length  ; i++){
               var curr = ppArr[i];
               listOfPerson.push(new Person(curr[0], curr[1], curr[2], curr[3]
               ,curr[4]));
             }
             createAllCompatiblePeople();
-
         };
       xmlhttpget.open("GET", "get-compatibility.php?g=" + username, true);
       xmlhttpget.send();
     };
   xmlhttppost.open("POST", "get-compatibility.php?p=" + username, true);
   xmlhttppost.send();
+}
+*/
+function getPersonalityCommontInterest(){
+  var username = document.getElementById('usernameForCompatiblePeople').value;
+  console.log('value we send: ' + username);
+  var xmlhttppost = new XMLHttpRequest();
+  xmlhttppost.onload = function() {
+    console.log(this.response);
+    $('#pci').text("Personality with most Common Interest " + this.response);
+  }
+  xmlhttppost.open("GET", "get-compatibility.php?i=" + username, true);
+  xmlhttppost.send();
+}
 
-  // gets stuff from the table
-
-
-
+function getOptimalMatch(){
+  var username = document.getElementById('usernameForCompatiblePeople').value;
+  console.log('value we send: ' + username);
+  var xmlhttppost = new XMLHttpRequest();
+  xmlhttppost.onload = function() {
+    console.log(this.response);
+    $('#optimal').text("your optimal match is: " + this.response);
+  }
+  xmlhttppost.open("GET", "get-compatibility.php?o=" + username, true);
+  xmlhttppost.send();
 }
 
 
 function createMatch(par){
-  alert(par);
+  var username = document.getElementById('usernameForCompatiblePeople').value;
+  var arr = [username,par];
+  var jsonString = JSON.stringify(arr);
+  console.log(jsonString);
+  $.ajax({
+      type: "POST",
+      url: "get-compatibility.php",
+      dataType: 'json',
+      data: {datamatch:jsonString},
+      cache: false,
+      success: function(out){
+        console.log(out);
+},
+      error: function(xhr,status,error){
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+      }
+  });
 }
 
 

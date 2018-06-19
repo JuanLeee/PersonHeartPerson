@@ -1,51 +1,72 @@
 
 <div id="nav-placeholder" style="position:absolute;">
 </div>
+<link rel="stylesheet" href="navbar.css">
 
+<div id='all-buttons' style="position:relative; top: 100px; left:50px;">
+  <div>
+    <button id='INTJ' type="button" onclick='addToArr("INTJ")' class='personality-button'></button>
+    <button id='INTP' type="button" onclick='addToArr("INTP")' class='personality-button'></button>
+    <button id='ENTJ' type="button" onclick='addToArr("ENTJ")' class='personality-button'></button>
+    <button id='ENTP' type="button" onclick='addToArr("ENTP")' class='personality-button'></button>
 
-<div id='all-buttons' style="position:relative; top: 200px; left:200px;">
-  <div>
-    <button type="button" onclick='addToArr("INTJ")'>INTJ</button>
-    <button type="button" onclick='addToArr("INTP")'>INTP</button>
-    <button type="button" onclick='addToArr("ENTJ")'>ENTJ</button>
-    <button type="button" onclick='addToArr("ENTP")'>ENTP</button>
+    <button id='INFJ' type="button" onclick='addToArr("INFJ")' class='personality-button'></button>
+    <button id='INFP' type="button" onclick='addToArr("INFP")' class='personality-button'></button>
+    <button id='ENFJ' type="button" onclick='addToArr("ENFJ")' class='personality-button'></button>
+    <button id='ENFP' type="button" onclick='addToArr("ENFP")' class='personality-button'></button>
   </div>
   <div>
-    <button type="button" onclick='addToArr("INFJ")'>INFJ</button>
-    <button type="button" onclick='addToArr("INFP")'>INFP</button>
-    <button type="button" onclick='addToArr("ENFJ")'>ENFJ</button>
-    <button type="button" onclick='addToArr("ENFP")'>ENFP</button>
+    <button id='ISTJ' type="button" onclick='addToArr("ISTJ")' class='personality-button'></button>
+    <button id='ISFJ' type="button" onclick='addToArr("ISFJ")' class='personality-button'></button>
+    <button id='ESTJ' type="button" onclick='addToArr("ESTJ")' class='personality-button'></button>
+    <button id='ESFJ' type="button" onclick='addToArr("ESFJ")' class='personality-button'></button>
+
+    <button id='ISTP' type="button" onclick='addToArr("ISTP")' class='personality-button'></button>
+    <button id='ISFP' type="button" onclick='addToArr("ISFP")' class='personality-button'></button>
+    <button id='ESTP' type="button" onclick='addToArr("ESTP")' class='personality-button'></button>
+    <button id='ESFP' type="button" onclick='addToArr("ESFP")' class='personality-button'></button>
   </div>
-  <div>
-    <button type="button" onclick='addToArr("ISTJ")'>ISTJ</button>
-    <button type="button" onclick='addToArr("ISFJ")'>ISFJ</button>
-    <button type="button" onclick='addToArr("ESTJ")'>ESTJ</button>
-    <button type="button" onclick='addToArr("ESFJ")'>ESFJ</button>
-  </div>
-  <div>
-    <button type="button" onclick='addToArr("ISTP")'>ISTP</button>
-    <button type="button" onclick='addToArr("ISFP")'>ISFP</button>
-    <button type="button" onclick='addToArr("ESTP")'>ESTP</button>
-    <button type="button" onclick='addToArr("ESFP")'>ESFP</button>
-  </div>
-  <div>
-    <input type='text' id='username' value='insert username here' readonly>
-    <button type='button' onclick='submitPersonalityPref()'>SUBMIT</button>
-  </div>
+
 </div>
-
-<div style="position:relative; top: 200px; left:200px;">
-  <input type='text' id='usernameForPP' value='get PP for this user' readonly>
-  <button type='button' onclick='getPersonalityPref()'>GET</button>
-  <p id='personalityPrefSelected'>Selected PersonalityPref:</p>
+<div style="position:relative; top: 150px; left:50px;">
+  <div  >
+    <input type='text' id='username' value='insert username here' readonly>
+    <button type='button' onclick='submitPersonalityPref()' class='buttonPP'>SUBMIT</button>
+    <input type='text' id='usernameForPP' value='get PP for this user' readonly>
+    <button type='button' onclick='getPersonalityPref()' class='buttonPP'>GET</button>
+    <p id='personalityPrefSelected'>Selected PersonalityPref:</p>
+  </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-// add navbar
+// add navbar hide username
 
 $(function(){
   $("#nav-placeholder").load("NavBar.html");
 });
+$('#username').hide();
+$('#usernameForPP').hide();
+// add picture for buttons
+
+$('#INTJ').css({'background-image': "url('buttons/intj.png')"})
+$('#INTP').css({'background-image': "url('buttons/intp.png')"})
+$('#ENTJ').css({'background-image': "url('buttons/entj.png')"})
+$('#ENTP').css({'background-image': "url('buttons/entp.png')"})
+
+$('#INFJ').css({'background-image': "url('buttons/infj.png')"})
+$('#INFP').css({'background-image': "url('buttons/infp.png')"})
+$('#ENFJ').css({'background-image': "url('buttons/enfj.png')"})
+$('#ENFP').css({'background-image': "url('buttons/enfp.png')"})
+
+$('#ISTJ').css({'background-image': "url('buttons/istj.png')"})
+$('#ISFJ').css({'background-image': "url('buttons/isfj.png')"})
+$('#ESTJ').css({'background-image': "url('buttons/estj.png')"})
+$('#ESFJ').css({'background-image': "url('buttons/esfj.png')"})
+
+$('#ISTP').css({'background-image': "url('buttons/istp.png')"})
+$('#ISFP').css({'background-image': "url('buttons/isfp.png')"})
+$('#ESTP').css({'background-image': "url('buttons/estp.png')"})
+$('#ESFP').css({'background-image': "url('buttons/esfp.png')"})
 
 //handle login
 function getCookie(cname) {

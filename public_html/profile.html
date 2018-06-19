@@ -1,13 +1,15 @@
 <div id="nav-placeholder" style="position:absolute;">
 </div>
-<div style="position:relative; top: 100px; left: 50px;">
-  <input type='text' id='usernameForProfile' value='get user profile' >
-  <button type='button' onclick='getUser()'>GET USER</button>
-  <button type='button' onclick='updateUser()'>UPDATE USER</button>
+<link rel="stylesheet" href="navbar.css">
+<div style="position:relative; top: 100px; left: 400px;">
+  <input type='text' id='usernameForProfile' value='get user profile'  >
+  <button type='button' onclick='getUser()' class='buttonPP' style="position:absolute; top: 0px; left: 400px; z-index:10;">GET USER</button>
+  <button type='button' onclick='updateUser()' class='buttonPP' style="position:absolute; top:100px; left: 400px; z-index:10;">UPDATE USER</button>
+  <button type='button' onclick='deleteUser()' class='buttonPP' style="position:absolute; top: 200px; left: 400px; z-index:10;">DELETE USER</button>
 </div>
-<div style="position:relative; top: 100px;  left: 50px;">
+<div style="position:relative; top: 100px;  left: 100px;">
   <p>USERNAME </p>
-  <input type='text' id='username-profile' value='username' class='icon-large' readonly>
+  <input type='text' id='username-profile' value='username' class='icon-large' >
   <p>EMAIL </p>
   <input type='text' id='email-profile' value='email' class='icon-large'>
   <p>PHONE NUMBER </p>
@@ -21,6 +23,8 @@
   <p>4 LETTER PERSONALITY </p>
   <p>Click <a href="https://www.16personalities.com/free-personality-test" target="_blank">here</a> to find your 4 letter personality. </p>
   <input type='text' id='personality-profile' value='aaaa' class='icon-large'>
+  <p>Password if you want to delete </p>
+  <input type='password' id='password' value='' class='icon-large'>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -85,6 +89,31 @@ function updateUser(){
           }
       });
   }
+}
+
+function deleteUser(){
+  var pass = document.getElementById('password').value;
+  var user = document.getElementById('username-profile').value;
+  var arr = [user,pass];
+  var jsonString = JSON.stringify(arr);
+  console.log(jsonString);
+  $.ajax({
+      type: "POST",
+      url: "get-profile.php",
+      dataType: 'json',
+      data: {datadelete:jsonString},
+      cache: false,
+
+      success: function(out){
+        console.log(out);
+},
+      error: function(xhr,status,error){
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+
+      }
+  });
 }
 
 // helper function for updateUser

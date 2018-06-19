@@ -1,10 +1,11 @@
 <html>
+<link rel="stylesheet" href="navbar.css">
 <head>
   <div id="nav-placeholder" style="position:absolute;"></div>
   <div style="position:relative; top: 100px; left: 50px;">
-    <form>
-      Interest:<input type="text" id='username'>
-      <button type="button" onclick='findinterests()'>Insert</button>
+    <form >
+      <input type="text" id='username'>
+      <button type="button" onclick='findinterests()'  class='buttonPP'>Insert</button>
     </form>
     <p>Your Matches</p>
     <table id="myTable">
@@ -25,6 +26,8 @@
 $(function(){
   $("#nav-placeholder").load("NavBar.html");
 });
+
+$("#username").hide();
 //logs in
 function getCookie(cname) {
   var name = cname + "=";

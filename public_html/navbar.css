@@ -283,3 +283,43 @@ label.mobile_menu span {
 	height: 30px;
   cursor: pointer;
 }
+
+.personality-button{
+	background-color:  transparent;
+	background-size: 140% 100%;
+	background-position: -19px 0px;
+	width: 100px;
+	height: 100px;
+	margin: 10px;
+	padding: 0;
+	border:0;
+	padding-left: -10px;
+
+}
+
+
+.buttonPP {
+	margin: 20px;
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #199660;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+	width: 200px;
+	height: 50px;
+}
+
+.buttonPP:hover {background-color: #106d45}
+
+.buttonPP:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}

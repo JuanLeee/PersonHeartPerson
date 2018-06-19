@@ -1,208 +1,228 @@
 <!DOCTYPE html>
-<!-- program runs through main.php, linked to this doc index.html, with this doc linked to:
-	mystyles.css
-	login.php
-	signup.php
-	signupconfirmation.html
-	homepage.html -->
 
-	<html>
-	<head>
-		<!-- maybe eventually this will be the home linker page -->
-		<title>PersonHeartPerson</title>
-		<link type="text/css" rel="stylesheet" href="php.css"/>
-		<meta name="PersonHeartPerson" content="Tinder with interests">
-		<meta name="keywords" content="PersonHeartPerson, Tinder, Person, Heart">
-		<meta name="author" content="Felix He">
-		<!-- following is for auto adjustment to screen size -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<html>
+<head>
+	<!-- maybe eventually this will be the home linker page -->
+	<title>PersonHeartPerson</title>
+	<link type="text/css" rel="stylesheet" href="php.css"/>
+	<style type="text/css">
+		html, body, #tbl_wrap { height: 100%; width: 100%; padding: 0; margin: 0; }
+		#td_wrap { vertical-align: middle; text-align: center; }
+		body,h1 {font-family: "Raleway", sans-serif}
+		.bgimg {
+			background-image: url('/w3images/forestbridge.jpg');
+			min-height: 100%;
+			background-position: center;
+			background-size: cover;
+		}
+	</style>
+	<meta name="PersonHeartPerson" content="Tinder with interests">
+	<meta name="keywords" content="PersonHeartPerson, Tinder, Person, Heart">
+	<meta name="author" content="Felix He">
+	<!-- following is for auto adjustment to screen size -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 
-	<body>
+</head>
 
-		<div id="nav-placeholder" style="position:absolute;">
-		</div>
-<div style="position:relative; top: 100px; left: 50px;">
-		<!-- log in form -->
-		<!-- Button to open the modal login form -->
-		<button onclick="document.getElementById('id01').style.display='block'">Login</button>
+<body>
 
-		<!-- The Modal -->
-		<div id="id01" class="modal">
-			<!--the close button -->
-			<span onclick="document.getElementById('id01').style.display='none'"
-			class="close" title="Close Modal">&times;</span>
+	<div class="w3-display-container w3-animate-opacity" style="min-height: 100%; background-position: center; background-size: cover; overflow-x: hidden">
 
-			<!-- Modal Content -->
-			<div class="modal-content animate container" >
+		<canvas id="canvas" style="position: fixed; top: 0; left: 0;z-index: -1;">
+			<script type="text/javascript" src="utils.js"></script>
+			<script type="text/javascript" src="bouncingb.js"></script>
+		</canvas>
 
-
-					<label for="username"><b>Username</b></label>
-					<input type="text" placeholder="Enter Username" id="username" name="username" required>
-
-					<label for="pw"><b>Password</b></label>
-					<input type="password" placeholder="Enter Password" id="pw" name="pw" required>
-
-					<button onclick="login()">Login</button>
-					<label>
-						<input type="checkbox" checked="checked" name="remember"> Remember me
-					</label>
-
-				<!-- for the footer of the form -->
-				<div class="container" style="background-color:#f1f1f1">
-					<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+		<div class="w3-display-middle">
+			<h1 class="w3-jumbo w3-animate-top">PersonHeartPerson</h1>
+			<hr class="w3-border-grey" style="margin:auto;width:40%">
+			<p class="w3-large w3-center">
+				<div id="td_wrap">
+					<!-- log in form -->
+					<!-- Button to open the modal login form -->
+					<button onclick="document.getElementById('id01').style.display='block'">Login</button>
 				</div>
+				<br>
+				<div id="td_wrap">
+					<!-- sign up form -->
+					<!-- Button to open the modal login form -->
+					<button onclick="document.getElementById('id02').style.display='block'">Sign Up</button>
+				</div>
+			</p>
+		</div>
+
+	</div>
+
+
+	<!-- The Modal -->
+	<div id="id01" class="modal">
+		<!--the close button -->
+		<span onclick="document.getElementById('id01').style.display='none'"
+		class="close" title="Close Modal">&times;</span>
+
+		<!-- Modal Content -->
+		<div class="modal-content animate container" >
+
+			<h1>Login</h1>
+			<h2>Please fill in this form to login.</h2>
+
+			<hr style="border: 1px solid #f1f1f1;margin-bottom: 25px;">
+
+			<label for="username"><b>Username</b></label>
+			<input style=" width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" type="text" placeholder="Enter Username" id="username" name="username" required>
+
+			<label for="pw"><b>Password</b></label>
+			<input style=" width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" type="password" placeholder="Enter Password" id="pw" name="pw" required>
+			<hr>
+			<button onclick="login()">Login</button>
+			<hr>
+			<!-- for the footer of the form -->
+			<div class="container" style="background-color:#f1f1f1">
+				<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
 			</div>
 		</div>
-
-
-		<!-- sign up form -->
-		<!-- Button to open the modal login form -->
-		<button onclick="document.getElementById('id02').style.display='block'">Sign Up</button>
-
-		<!-- The Modal -->
-	<div id="id02" class="modal">
-			<!--the close button -->
-			<span onclick="document.getElementById('id02').style.display='none'"
-			class="close" title="Close Modal">&times;</span>
-
-			<!-- Modal Content -->
-
-				<div class="modal-content animate container">
-					<h1>Sign Up</h1>
-					<p>Please fill in this form to create an account.</p>
-
-					<hr>
-
-					<label for="email"><b>Email</b></label>
-					<label>
-						<input type="button" value="Check Availability" onclick="checkAvailableEmail()"/>
-						<span id ="emailAvailability"></span>
-					</label>
-					<input type="email" placeholder="Enter Email" id="email" name="email" required>
-
-					<label for="uname"><b>Username</b></label>
-					<label>
-						<input type="button" value="Check Availability" onclick="checkAvailableUserName()"/>
-						<span id ="usernameAvailability"></span>
-					</label>
-					<input type="text" placeholder="Enter Username" id="uname" name="uname" required>
-
-					<label for="psw1"><b>Password</b></label>
-					<input type="password" placeholder="Enter Password" id="psw1" name="psw1" required>
-
-					<label for="psw2"><b>Confirm Password</b></label>
-					<input type="password" placeholder="Confirm Password" id="psw2" name="psw2" required>
-
-					<button onclick="signup()">Sign Up</button>
-
-				</div>
-
-				<!-- for the footer of the form -->
-				<div class="container" style="background-color:#f1f1f1">
-					<button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
-				</div>
 	</div>
-</div>
 
-		<!-- script to auto-close when click on outside -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-<script>
-// create NavBar
-/*
-$(function(){
-  $("#nav-placeholder").load("NavBar.html");
-});
-*/
 
-// Get the modals
-var modal = document.getElementById('id01');
-var modal2 = document.getElementById('id02');
+	<!-- The Modal -->
+	<div id="id02" class="modal">
+		<!--the close button -->
+		<span onclick="document.getElementById('id02').style.display='none'"
+		class="close" title="Close Modal">&times;</span>
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-	if (event.target == modal) {
-		modal.style.display = "none";
-	} else if (event.target == modal2) {
-		modal2.style.display = "none";
-	}
-}
+		<!-- Modal Content -->
 
-//signsups
-function signup(){
-	var email = document.getElementById('email').value;
-	var username = document.getElementById('uname').value;
-	var pw1 = document.getElementById('psw1').value;
-	var pw2 = document.getElementById('psw2').value;
+		<div class="modal-content animate container">
+			<h1>Sign Up</h1>
+			<h2>Please fill in this form to create an account.</h2>
 
-	if (pw1 != pw2){
-		alert("passwords don't match ");
-		return;
-	}
+			<hr style="border: 1px solid #f1f1f1; margin-bottom: 25px;">
 
-	var arr = [username ,pw1 , email];
-	var jsonString = JSON.stringify(arr);
-	$.ajax({
+			<label for="email"><b>Email</b></label>
+			<input style=" width: 100%; padding: 12px 20px;	margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" type="email" placeholder="Enter Email" id="email" name="email" required>
+
+			<label for="uname"><b>Username</b></label>
+			<input style=" width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" type="text" placeholder="Enter Username" id="uname" name="uname" required>
+
+			<label for="psw1"><b>Password</b></label>
+			<input style=" width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; 	border: 1px solid #ccc;		border-radius: 4px;		box-sizing: border-box;" type="password" placeholder="Enter Password" id="psw1" name="psw1" required>
+
+			<label for="psw2"><b>Confirm Password</b></label>
+			<input style=" width: 100%;	padding: 12px 20px;	margin: 8px 0;		display: inline-block;	border: 1px solid #ccc;	border-radius: 4px;		box-sizing: border-box;" type="password" placeholder="Confirm Password" id="psw2" name="psw2" required>
+
+			<hr>
+			<button onclick="signup()">Sign Up</button>
+			<hr>
+
+			<!-- for the footer of the form -->
+			<div class="container" style="background-color:#f1f1f1 ">
+				<button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+			</div>
+
+
+		</div>
+	</div>
+
+	<script>
+		// Get the modals
+		var modal = document.getElementById('id01');
+		var modal2 = document.getElementById('id02');
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = 'none';
+			} else if (event.target == modal2) {
+				modal2.style.display = 'none';
+			}
+		}
+
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script>
+		// create NavBar
+		/*
+		$(function(){
+			$("#nav-placeholder").load("NavBar.html");
+		});
+		*/
+
+
+		//signsups
+		function signup(){
+			var email = document.getElementById('email').value;
+			var username = document.getElementById('uname').value;
+			var pw1 = document.getElementById('psw1').value;
+			var pw2 = document.getElementById('psw2').value;
+
+			if (pw1 != pw2){
+				alert("Passwords Don't Match ");
+				return;
+			}
+
+			var arr = [username ,pw1 , email];
+			var jsonString = JSON.stringify(arr);
+			$.ajax({
 				type: "POST",
 				url: "signup.php",
 				data: {data : jsonString},
 				cache: false,
 				success: function(out){
-						if(out != ''){
-							alert("failed signup. username or email taken");
-						}
+					console.log(out);
+					if(out != ''){
+						alert("Failed Signup. Username or Email already taken");
+					}
 				}
-		});
+			});
 
-}
-
-
-//does LOGIN
-function login(){
-	var username = document.getElementById('username').value;
-	var password = document.getElementById('pw').value;
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onload = function(){
-		var ret = JSON.parse(this.response);
-		var strret = ret.toString();
-		var len = password.length;
-		var check = strret.replace(/\s/g,'');
-		console.log(strret);
-		if (check == password){
-			setCookie(username);
-			location.href= 'profile.html';
 		}
-	}
-	xmlhttp.open("GET", "login.php?q=" + username, true);
-	xmlhttp.send();
-};
 
-function setCookie(uname) {
-	document.cookie = 'username=' + uname +'; Path=/;';
-}
 
-function getCookie(cname) {
-	var name = cname + "=";
-	var decodedCookie = decodeURIComponent(document.cookie);
-	var ca = decodedCookie.split(';');
-	for(var i = 0; i <ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ') {
+		//does LOGIN
+		function login(){
+			var username = document.getElementById('username').value;
+			var password = document.getElementById('pw').value;
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onload = function(){
+				var ret = JSON.parse(this.response);
+				var strret = ret.toString();
+				var len = password.length;
+				var check = strret.replace(/\s/g,'');
+				console.log(strret);
+				if (check == password){
+					setCookie(username);
+					location.href= 'profile.html';
+				}
+			}
+			xmlhttp.open("GET", "login.php?q=" + username, true);
+			xmlhttp.send();
+		};
+
+		function setCookie(uname) {
+			document.cookie = 'username=' + uname +'; Path=/;';
+		}
+
+		function getCookie(cname) {
+			var name = cname + "=";
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
 					c = c.substring(1);
-			}
-			if (c.indexOf(name) == 0) {
+				}
+				if (c.indexOf(name) == 0) {
 					return c.substring(name.length, c.length);
+				}
 			}
-	}
-	return "";
-}
-
-
-</script>
-
-<hr>
-
-<!-- insert landing opening page beautification here -->
+			return "";
+		}
+	</script>
 
 </body>
+</html>
